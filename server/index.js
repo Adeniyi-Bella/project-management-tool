@@ -19,7 +19,7 @@ const app = express();
 connectDB();
 
 app.use(cors());
-app.use(express.json()); // application/json
+// app.use(express.json()); // application/json
 // app.use(
 //   '/graphql',
 //   graphqlHTTP({
@@ -27,21 +27,20 @@ app.use(express.json()); // application/json
 //     graphiql: process.env.NODE_env === 'development',  })
 // );
 
-const httpServer = http.createServer(app);
-const startApolloServer = async(app, httpServer) => {
+const main = async() => {
   const server = new ApolloServer({
-    typeDefs,
-    resolvers,
-    plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
+    schema: schema,
+    // resolvers,
+    // plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
   });
 
-  await server.start();
-  server.applyMiddleware({ app });
+  // await server.start();
+  server.applyMiddleware({path: "/graphql", app });
 }
+main();
 
+// startApolloServer(app, httpServer);
 
-startApolloServer(app, httpServer);
-
-export default httpServer;
+// export default httpServer;
 // console.log(24);
 // app.listen(port, console.log(`Server running on port ${port}`));
